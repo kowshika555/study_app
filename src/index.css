@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+:root {
+  /* --- Sunlit (Light) Mode: Playful & Storybook --- */
+  --bg-main: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #F0F4F8 100%);
+  --color-light: #FFFFFF;
+  --color-dark: #2D3436;
+  /* Soft dark for better contrast than pure black */
+
+  /* Vibrant Palette for Light Theme */
+  --v-pink: #FF1493;
+  /* Playful Pink/Fuchsia */
+  --v-orange: #FF8C00;
+  /* Bold Orange */
+  --v-green: #2ECC71;
+  /* Vivid Green */
+  --v-yellow: #F1C40F;
+  /* Sunny Yellow */
+  --v-red: #E74C3C;
+  /* Bright Red */
+  --v-blue: #3498DB;
+  /* Vibrant Blue */
+  --v-teal: #16A085;
+  /* Vibrant Teal */
+  --v-purple: #8E44AD;
+  /* Deep Purple */
+  --v-lime: #A2D149;
+  /* Lime/Avocado Green */
+  --v-magenta: #FF00FF;
+  /* Fuchsia/Magenta */
+  --v-aqua: #00CED1;
+  /* Turquoise/Aqua Blue */
+
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --grad-main: linear-gradient(135deg, var(--v-pink) 0%, var(--v-purple) 100%);
+  --sparkle-color: var(--v-yellow);
+
+  --font-main: 'Outfit', sans-serif;
+  --radius-card: 32px;
+}
+
+[data-theme='dark'] {
+  /* --- Moonlit (Dark) Mode: Pure Black --- */
+  --bg-main: #000000;
+  --color-light: #1A1A1A;
+  --color-dark: #FFFFFF;
+
+  /* Neon Palette for Dark Theme */
+  --n-blue: #AEC6CF;
+  --n-yellow: #FFFF00;
+  --n-coral: #FF8B60;
+  --n-lime: #32CD32;
+  --n-magenta-soft: #DA70D6;
+  --n-aqua: #E0FFFF;
+  --n-neon-pink: #FF00FF;
+  --n-neon-lime: #CCFF00;
+  --n-cyan: #00FFFF;
+  --n-sky: #87CEEB;
+  --n-red: #FF4500;
+  --n-gold: #FFD700;
+
+  --card-bg: rgba(255, 255, 255, 0.05);
+  /* Translucent so the background shows through */
+  --shadow-card: none;
+  --grad-main: linear-gradient(135deg, #000000 0%, #1A1A1A 100%);
+  --sparkle-color: var(--n-cyan);
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-main) !important;
+  background: var(--bg-main) fixed !important;
+  color: var(--color-dark);
+  transition: background 0.5s ease, color 0.5s ease;
+  min-height: 100vh;
+}
+
+body[data-theme='dark'] {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Animations */
+@keyframes popIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+@keyframes drift {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(30px);
+  }
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(209, 196, 233, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(209, 196, 233, 0.8);
+  }
+
+  100% {
+    box-shadow: 0 0 5px rgba(209, 196, 233, 0.5);
+  }
+}
+
+@keyframes fairy-dust {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+.drifting {
+  animation: drift 8s ease-in-out infinite;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 2.5rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  animation: popIn 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  background: var(--card-bg);
+  filter: brightness(1.1);
+}
+
+.btn {
+  background: var(--v-blue);
+  /* Default vibrant blue */
+  color: white;
+  border: none;
+  padding: 1.2rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  margin: 0.8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(184, 228, 211, 0.3);
+  filter: brightness(1.1);
+}
+
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: var(--v-pink);
+  color: white;
+}
+
+.btn-accent {
+  background: var(--v-purple);
+  /* Visibility fix for back button */
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-dark);
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.score-badge {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  box-shadow: var(--shadow-card);
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Background elements */
+.magic-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.cloud {
+  position: absolute;
+  background: var(--v-blue);
+  filter: blur(80px);
+  opacity: 0.1;
+  border-radius: 50%;
+}
+
+[data-theme='dark'] .cloud {
+  background: var(--n-cyan);
+}
+
+.lantern {
+  position: absolute;
+  width: 15px;
+  height: 20px;
+  background: var(--sparkle-color);
+  border-radius: 5px;
+  box-shadow: 0 0 15px var(--sparkle-color);
+  opacity: 0.6;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+  box-shadow: 0 0 20px var(--v-pink);
+}
+
+/* Helper for multi-colored text */
+.rainbow-text {
+  background: linear-gradient(to right,
+      var(--v-pink), var(--v-orange), var(--v-blue),
+      var(--v-purple), var(--v-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  display: inline-block;
+}
+
+[data-theme='dark'] .rainbow-text {
+  background: linear-gradient(to right,
+      var(--n-cyan), var(--n-neon-pink), var(--n-neon-lime),
+      var(--n-gold), var(--n-sky));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Category Specific Theme Colors */
+:root {
+  --theme-color-early-learners: var(--v-pink);
+  --theme-color-primary-school: var(--v-teal);
+  --theme-color-middle-school: var(--v-purple);
+}
+
+[data-theme='dark'] {
+  --theme-color-early-learners: var(--n-neon-pink);
+  --theme-color-primary-school: var(--n-cyan);
+  --theme-color-middle-school: var(--n-magenta-soft);
+}
+
+.category-title {
+  color: var(--theme-color-early-learners);
+}
