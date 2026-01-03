@@ -1,17 +1,26 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const QuizGame = ({ questions, title, onFinish, onQuit, category }) => {
     // Shuffling logic: If we have more than 10, pick 10 random ones. 
     // This ensures variety on every game start.
     const [shuffledQuestions] = useState(() => {
         const pool = [...questions];
-        // Fisher-Yates shuffle for better randomness
+        // Fisher-Yates shuffle for questions
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
         }
-        return pool.slice(0, 10);
+
+        // Pick top 10 and shuffle their options
+        return pool.slice(0, 10).map(q => {
+            const shuffledOptions = [...q.options];
+            for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+            }
+            return { ...q, options: shuffledOptions };
+        });
     });
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,12 +38,40 @@ const QuizGame = ({ questions, title, onFinish, onQuit, category }) => {
     const currentQuestion = shuffledQuestions[currentIndex];
     const progress = ((currentIndex) / shuffledQuestions.length) * 100;
 
+    const [voices, setVoices] = useState([]);
+
+    // Load voices on mount
+    useEffect(() => {
+        const loadVoices = () => {
+            const availableVoices = window.speechSynthesis.getVoices();
+            setVoices(availableVoices);
+        };
+
+        loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+    }, []);
+
     const playSound = (text, idx = null) => {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); // Stop playing anything else
+
             const utterance = new window.SpeechSynthesisUtterance(text);
-            utterance.rate = 0.8;
-            utterance.pitch = 1.2;
+
+            // Voice selection logic: Prioritize Google or Natural sounding voices
+            const preferredVoice = voices.find(v =>
+                (v.name.includes('Google') || v.name.includes('Natural')) && v.lang.startsWith('en')
+            ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            // Clarity fine-tuning: Bit slower and clearer pitch for students
+            utterance.rate = 0.85;
+            utterance.pitch = 1.1;
+            utterance.volume = 1.0;
 
             if (idx !== null) {
                 setIsPlayingSound(idx);
@@ -77,7 +114,7 @@ const QuizGame = ({ questions, title, onFinish, onQuit, category }) => {
             setShowResult(false);
             setIsPlayingSound(null);
         } else {
-            onFinish(score + (isCorrect ? 10 : 0));
+            onFinish(score);
         }
     };
 
@@ -107,7 +144,14 @@ const QuizGame = ({ questions, title, onFinish, onQuit, category }) => {
                     </div>
                 ) : (
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                        <h2 style={{ fontSize: '2.8rem', color: 'var(--v-blue)', lineHeight: '1.2', fontWeight: '800' }}>{currentQuestion.question}</h2>
+                        <h2 style={{ fontSize: '2.8rem', color: 'var(--theme-color-early-learners)', lineHeight: '1.2', fontWeight: '800' }}>{currentQuestion.question}</h2>
+                        <button
+                            className="btn btn-accent"
+                            style={{ padding: '0.5rem 1rem', fontSize: '1rem', marginTop: '1rem' }}
+                            onClick={() => playSound(currentQuestion.question)}
+                        >
+                            🔊 Hear Question
+                        </button>
                     </div>
                 )}
 
