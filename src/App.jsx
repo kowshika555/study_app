@@ -99,7 +99,7 @@ function App() {
         }}
         title={theme === 'light' ? 'Switch to Moonlit Mode' : 'Switch to Sunlit Mode'}
       >
-        {theme === 'light' ? '☀️' : '🌙'}
+        {theme === 'light' ? '🌙' : '☀️'}
       </button>
 
       {/* Background Decorations */}
